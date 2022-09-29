@@ -6,9 +6,9 @@ sock.on('message', (data) => {
   const msg = data.toString()
   const len = Number(msg.slice(-3))
   const sign = msg.slice(-3 - len, -3)
-  const realData = msg.slice(-3 - len)
+  const realData = msg.slice(0, -3 - len)
   const [url, method] = sign.split('*')
-
+  console.log(realData)
   const req = http
     .request(
       {
@@ -30,9 +30,7 @@ sock.on('message', (data) => {
       }
     )
     .on('error', (err) => console.log('Error: ', err.message))
-
-  req.write(realData)
-  req.end()
+    .end(realData)
 })
 
 sock.on('open', () => console.log('connect success !!!!'))
