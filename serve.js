@@ -31,10 +31,7 @@ const httpServer = http
     console.log('http服务已启动~')
   })
 
-const wsServer = new ws.Server({
-  host: 'localhost',
-  port: 6080,
-})
+const wsServer = new ws.Server({ port: 6080 })
 wsServer.on('connection', (sock) => {
   wsSock = sock
 

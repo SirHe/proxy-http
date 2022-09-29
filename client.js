@@ -1,7 +1,7 @@
 const http = require('http')
 const ws = require('ws')
 
-const sock = new ws('ws://localhost:6080')
+const sock = new ws('ws://47.110.224.195:6080')
 sock.on('message', (data) => {
   const msg = data.toString()
   const len = Number(msg.slice(-3))
