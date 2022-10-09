@@ -1,19 +1,20 @@
 const http = require('http')
 const ws = require('ws')
 
+const portMap = { 80: 9529, 1412: 1412 }
 const sock = new ws('ws://47.110.224.195:6080')
 sock.on('message', (data) => {
   const msg = data.toString()
   const len = Number(msg.slice(-3))
   const sign = msg.slice(-3 - len, -3)
   const realData = msg.slice(0, -3 - len)
-  const [url, method] = sign.split('*')
-  console.log(realData)
+  const [url, method, port] = sign.split('*')
+  console.log(realData, '======')
   const req = http
     .request(
       {
         hostname: 'localhost',
-        port: 5000, // 需要代理到本地的端口
+        port: portMap[port], // 需要代理到本地的端口
         method,
         path: url,
       },
@@ -25,7 +26,7 @@ sock.on('message', (data) => {
         })
 
         res.on('end', () => {
-          sock.send(data.toString())
+          sock.send(`${data.toString()}${port.padStart(4, 0)}`)
         })
       }
     )
